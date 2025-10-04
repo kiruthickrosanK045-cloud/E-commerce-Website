@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxeShop - Premium Fashion</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">LuxeShop</div>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#products" class="nav-link">Products</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+            </ul>
+            <div class="header-actions">
+                <button class="login-btn" onclick="openLoginModal()">Login</button>
+                <div class="cart-icon" onclick="toggleCart()">
+                    🛒
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Login Modal -->
+    <div class="auth-modal" id="loginModal">
+        <div class="auth-modal-content">
+            <button class="close-auth-modal" onclick="closeAuthModals()">×</button>
+            <h2>Welcome Back</h2>
+            <p class="auth-subtitle">Login to continue shopping</p>
+            
+            <form class="auth-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginIdentifier">Email or Phone Number</label>
+                    <input type="text" id="loginIdentifier" placeholder="Enter email or phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter password" required>
+                </div>
+                
+                <button type="button" class="forgot-password-link" onclick="openForgotPasswordModal()">Forgot Password?</button>
+                
+                <button type="submit" class="auth-submit-btn">Login</button>
+            </form>
+            
+            <div class="auth-divider">
+                <span>Don't have an account?</span>
+            </div>
+            
+            <button class="auth-switch-btn" onclick="switchToSignup()">Create Account</button>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="auth-modal" id="signupModal">
+        <div class="auth-modal-content">
+            <button class="close-auth-modal" onclick="closeAuthModals()">×</button>
+            <h2>Create Account</h2>
+            <p class="auth-subtitle">Join us for an amazing shopping experience</p>
+            
+            <form class="auth-form" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signupIdentifier">Email or Phone Number</label>
+                    <input type="text" id="signupIdentifier" placeholder="Enter email or phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="Create a password" required minlength="6">
+                    <small>Minimum 6 characters</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signupConfirmPassword">Confirm Password</label>
+                    <input type="password" id="signupConfirmPassword" placeholder="Confirm your password" required>
+                </div>
+                
+                <button type="submit" class="auth-submit-btn">Create Account</button>
+            </form>
+            
+            <div class="auth-divider">
+                <span>Already have an account?</span>
+            </div>
+            
+            <button class="auth-switch-btn" onclick="switchToLogin()">Login</button>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="auth-modal" id="forgotPasswordModal">
+        <div class="auth-modal-content">
+            <button class="close-auth-modal" onclick="closeAuthModals()">×</button>
+            <h2>Reset Password</h2>
+            <p class="auth-subtitle">Enter your email or phone to receive reset instructions</p>
+            
+            <form class="auth-form" onsubmit="handleForgotPassword(event)">
+                <div class="form-group">
+                    <label for="forgotPasswordIdentifier">Email or Phone Number</label>
+                    <input type="text" id="forgotPasswordIdentifier" placeholder="Enter email or phone" required>
+                </div>
+                
+                <button type="submit" class="auth-submit-btn">Send Reset Link</button>
+            </form>
+            
+            <div class="auth-divider">
+                <span>Remember your password?</span>
+            </div>
+            
+            <button class="auth-switch-btn" onclick="switchToLogin()">Back to Login</button>
+        </div>
+    </div>
+
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <button class="close-cart" onclick="toggleCart()">×</button>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-total">
+            <div class="cart-total-label">
+                <span>Total:</span>
+                <span id="cartTotal">₹0.00</span>
+            </div>
+        </div>
+        <button class="checkout-button" onclick="proceedToCheckout()">Proceed to Checkout</button>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="checkout-modal" id="checkoutModal">
+        <div class="checkout-modal-content">
+            <button class="close-checkout-modal" onclick="closeCheckout()">×</button>
+            
+            <div class="checkout-steps">
+                <div class="step-indicator">
+                    <div class="step active" id="step1Indicator">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Contact Details</div>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" id="step2Indicator">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Payment</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Customer Contact Details -->
+           <div class="checkout-step" id="contactDetailsStep">
+    <h2>Customer Contact Details</h2>
+    <p class="checkout-subtitle">Please provide your delivery information</p>
+    
+    <form class="checkout-form" id="contactForm">
+        <!-- Full Name -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="customerName">Full Name *</label>
+                <div class="input-icon">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="customerName" placeholder="Enter your full name" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Number -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="customerMobile">Mobile Number *</label>
+                <div class="input-icon">
+                    <i class="fas fa-phone"></i>
+                    <input type="tel" id="customerMobile" placeholder="Enter 10-digit mobile number" 
+                           pattern="[0-9]{10}" maxlength="10" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- Address -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="customerAddress">Address *</label>
+                <div class="input-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <textarea id="customerAddress" rows="3" placeholder="Enter your complete address" required></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pin Code + District -->
+        <div class="form-row">
+            <div class="form-group half">
+                <label for="customerPincode">Pin Code *</label>
+                <div class="input-icon">
+                    <i class="fas fa-map-pin"></i>
+                    <input type="text" id="customerPincode" placeholder="6-digit pin code" 
+                           pattern="[0-9]{6}" maxlength="6" required>
+                </div>
+            </div>
+
+            <div class="form-group half">
+                <label for="customerDistrict">District *</label>
+                <div class="input-icon">
+                    <i class="fas fa-city"></i>
+                    <input type="text" id="customerDistrict" placeholder="Enter district" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+    <div class="form-group">
+        <label for="customerState">State *</label>
+        <div class="input-icon">
+            <i class="fas fa-flag"></i>
+            <select id="customerState" required>
+                <option value="">Select State</option>
+                <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                <option value="Assam">Assam</option>
+                <option value="Bihar">Bihar</option>
+                <option value="Chandigarh">Chandigarh</option>
+                <option value="Chhattisgarh">Chhattisgarh</option>
+                <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Goa">Goa</option>
+                <option value="Gujarat">Gujarat</option>
+                <option value="Haryana">Haryana</option>
+                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                <option value="Jharkhand">Jharkhand</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Kerala">Kerala</option>
+                <option value="Ladakh">Ladakh</option>
+                <option value="Lakshadweep">Lakshadweep</option>
+                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Manipur">Manipur</option>
+                <option value="Meghalaya">Meghalaya</option>
+                <option value="Mizoram">Mizoram</option>
+                <option value="Nagaland">Nagaland</option>
+                <option value="Odisha">Odisha</option>
+                <option value="Puducherry">Puducherry</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Rajasthan">Rajasthan</option>
+                <option value="Sikkim">Sikkim</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Telangana">Telangana</option>
+                <option value="Tripura">Tripura</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <option value="Uttarakhand">Uttarakhand</option>
+                <option value="West Bengal">West Bengal</option>
+            </select>
+        </div>
+    </div>
+</div>
+        <!-- Actions -->
+        <div class="form-actions">
+            <button type="button" class="checkout-next-btn" onclick="goToPaymentStep()">
+                Continue to Payment →
+            </button>
+        </div>
+    </form>
+</div>
+
+
+            <!-- Step 2: Payment Method -->
+            <div class="checkout-step hidden" id="paymentStep">
+                <h2>Select Payment Method</h2>
+                <p class="checkout-subtitle">Choose your preferred payment option</p>
+                
+                <div class="order-summary">
+                    <h3>Order Summary</h3>
+                    <div id="checkoutOrderItems"></div>
+                    <div class="order-total">
+                        <span>Total Amount:</span>
+                        <span id="checkoutTotal">₹0.00</span>
+                    </div>
+                </div>
+                
+                <div class="payment-methods">
+                    <div class="payment-option" onclick="selectPaymentMethod('upi')">
+                        <input type="radio" name="payment" id="upiPayment" value="upi">
+                        <label for="upiPayment">
+                            <div class="payment-icon">💳</div>
+                            <div class="payment-info">
+                                <div class="payment-title">UPI Payment</div>
+                                <div class="payment-desc">Pay using Google Pay, PhonePe, Paytm, or any UPI app</div>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <div class="payment-option" onclick="selectPaymentMethod('cod')">
+                        <input type="radio" name="payment" id="codPayment" value="cod">
+                        <label for="codPayment">
+                            <div class="payment-icon">💵</div>
+                            <div class="payment-info">
+                                <div class="payment-title">Cash on Delivery</div>
+                                <div class="payment-desc">Pay with cash when your order is delivered</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="upi-details hidden" id="upiDetails">
+                    <div class="upi-info">
+                        <h4>UPI Payment Details</h4>
+                        <p>Scan the QR code or use UPI ID to complete payment</p>
+                        <div class="upi-id">UPI ID: luxeshop@upi</div>
+                        <div class="qr-placeholder">
+                            <div class="qr-code">📱 QR Code Here</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="checkout-actions">
+                    <button class="checkout-back-btn" onclick="goBackToContact()">
+                        ← Back to Contact Details
+                    </button>
+                    <button class="checkout-place-order-btn" onclick="placeOrder()">
+                        Place Order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Premium Fashion Collection</h1>
+            <p>Discover our curated selection of luxury items crafted for the modern individual</p>
+            <button class="cta-button" onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})">
+                Shop Now
+            </button>
+        </div>
+    </section>
+
+    <section class="products-section" id="products">
+        <h2 class="section-title">Featured Products</h2>
+        <div class="products-grid" id="productsGrid"></div>
+    </section>
+
+    <section class="about-section" id="about">
+        <div class="about-container">
+            <h2 class="section-title">About Us</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Welcome to LuxeShop</h3>
+                    <p>At LuxeShop, we believe fashion is more than just clothing – it's a statement of who you are. Founded with a passion for quality and style, we curate premium fashion collections for men, women, and kids.</p>
+                    
+                    <h3>Our Mission</h3>
+                    <p>To provide our customers with high-quality, trendy, and affordable fashion that makes them feel confident and stylish every day.</p>
+                    
+                    <h3>Why Choose Us?</h3>
+                    <ul>
+                        <li>✓ Premium quality fabrics and materials</li>
+                        <li>✓ Latest fashion trends and timeless classics</li>
+                        <li>✓ Affordable pricing without compromising quality</li>
+                        <li>✓ Wide range for all ages and occasions</li>
+                        <li>✓ Easy returns and excellent customer support</li>
+                    </ul>
+                    
+                    <h3>Contact Us</h3>
+                    <p>Have questions? Reach out to us at:</p>
+                    <p>📧 Email: support@luxeshop.com</p>
+                    <p>📞 Phone: +91 98765 43210</p>
+                    <p>📍 Location: Arakkonam, Tamil Nadu, India</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 LuxeShop. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
