@@ -1263,36 +1263,38 @@ footer {
 
 /* Order Summary Styles */
 .order-summary {
-  background: #f8f9fa;
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 30px;
-  border: 1px solid #e2e8f0;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 30px;
 }
 
 .order-summary h3 {
-  color: #2d3748;
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  border-bottom: 2px solid #e2e8f0;
-  padding-bottom: 8px;
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.order-total span:first-child {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.order-total span:last-child {
+    color: #667eea;
+    font-size: 1.2rem;
 }
 
 #checkoutOrderItems {
-  margin-bottom: 16px;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .order-total {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 16px;
-  border-top: 2px solid #e2e8f0;
-  font-weight: 600;
-  font-size: 18px;
-  color: #2d3748;
+    color: #ffffff !important;
+    font-weight: 700;
 }
+
 
 /* Payment Methods Styles */
 .payment-methods {
@@ -1536,4 +1538,24 @@ footer {
   .payment-icon {
     margin-right: 0;
   }
+}
+/* Style the select box itself */
+#customerState {
+  background-color: #f9f9f9;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Style the dropdown options */
+#customerState option {
+  background-color: #ffffff; /* default background */
+  color: #000000;            /* text color */
+}
+
+/* Optional: highlight on hover */
+#customerState option:hover {
+  background-color: #d8e6ff; /* light blue hover */
 }
